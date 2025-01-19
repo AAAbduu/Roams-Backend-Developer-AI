@@ -2,12 +2,19 @@ import jwt
 import os
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
+from fastapi import Depends, HTTPException
+from .auth_bearer import JWTBearer
+from fastapi.security import HTTPAuthorizationCredentials
+
+
 
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"  
 ACCESS_TOKEN_EXPIRE_MINUTES = 30  #minutes
+oauth2_scheme = JWTBearer()
+
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
@@ -17,11 +24,16 @@ def create_access_token(data: dict) -> str:
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-def verify_access_token(token: str) -> dict:
+def verify_access_token(credentials: HTTPAuthorizationCredentials = Depends(oauth2_scheme)) -> dict:
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        token_bytes = credentials.credentials.encode('utf-8')
+        payload = jwt.decode(token_bytes, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except jwt.ExpiredSignatureError:
-        raise Exception("Token has expired")
+        raise HTTPException(status_code=401, detail="Token has expired")
     except jwt.JWTError:
-        raise Exception("Invalid token")
+        raise HTTPException(status_code=401, detail="Invalid token")
+        
+
+
+
