@@ -12,6 +12,7 @@ class UserService:
 
     def create_user(self, username: str, email: str, password: str) -> User:
         try:
+            password = pwd_context.hash(password)
             return self.user_repository.create_user(username, email, password)
         except ValueError as e:
             return {"error": str(e)}
