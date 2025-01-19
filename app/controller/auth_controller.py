@@ -28,4 +28,4 @@ async def login_user(user: UserLoginDto, user_service: UserService = Depends(get
         else:
             raise HTTPException(status_code=500, detail="Internal Server Error")
         
-    return {"message": "User logged in successfully", "user": result}
+    return {"access_token": result, "token_type": "bearer"}
