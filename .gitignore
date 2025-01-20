@@ -3,3 +3,7 @@
 /app/**/__pycache__/
 
 roams_backendAI
+
+/app/tests
+
+api_requests.log
