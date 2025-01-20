@@ -147,8 +147,6 @@ Para ejecutar la aplicación en desarrollo:
 
 3. **Acceder a la documentación interactiva**:
     - Swagger: `http://127.0.0.1:8000/docs`
-    - Redoc: `http://127.0.0.1:8000/redoc`
-
 ## Autenticación
 
 La API requiere autenticación JWT para los endpoints que permiten generar texto y acceder al historial. Puedes obtener el token de acceso mediante el endpoint `/login` después de registrarte.
