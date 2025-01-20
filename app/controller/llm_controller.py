@@ -10,7 +10,7 @@ router = APIRouter()
 @router.post("/generate", summary="Generate text using the model")
 async def generate_text(request: GenerateTextRequestDto, llm_service: LLMService = Depends(get_llm_service), payload: dict = Depends(verify_access_token)):
     try:
-        generated_text = llm_service.generate_text(request)
+        generated_text = llm_service.generate_text(request, payload)
         return {"prompt": request.prompt, "generated_text": generated_text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error generating text: {str(e)}")

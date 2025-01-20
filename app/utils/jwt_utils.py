@@ -6,8 +6,6 @@ from fastapi import Depends, HTTPException
 from .auth_bearer import JWTBearer
 from fastapi.security import HTTPAuthorizationCredentials
 
-
-
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY")
@@ -31,7 +29,7 @@ def verify_access_token(credentials: HTTPAuthorizationCredentials = Depends(oaut
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except jwt.JWTError:
+    except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
         
 
